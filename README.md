@@ -1,4 +1,10 @@
 # SmokelessRuntimeEFIPatcher
+
+# This Tool Will not be Longer Mantained
+At least for now, I will not make any update to this
+
+
+
 # These Are tool From "The Vault", that I decided to upload, so expect not fully polished product, or very slow Fixes if any
 
 # This is not a request form
@@ -27,10 +33,6 @@ The real reason why this exist, is that with an update Lenovo removed the Unlock
 # How this work
 When the EFI App is booted up, it look for a file Called *SREP_Config.cfg*, containing a list of command to execute, then will execute them
 
-# Support/Donate
-If you want to donate/support please consider supportorting on [Patreon](https://www.patreon.com/SmokelessCPU)
-
-For one one donation, you can subribe for a month to Patreon then after the biilling, unsubsribe; (I might add a paypal in future)
 
 # How to use it
 * Download the Latest zip, from the [Release Page](https://github.com/SmokelessCPUv2/SmokelessRuntimeEFIPatcher/releases/latest)
