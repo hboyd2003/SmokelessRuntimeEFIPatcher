@@ -1,50 +1,37 @@
 # SmokelessRuntimeEFIPatcher
 
-# This Tool Will not be Longer Mantained
-At least for now, I will not make any update to this
+> [!WARNING]
+> This tool modifies BIOS binaries at runtime.
+> **Use at your own risk, I am not responsible for any damage, bricking etc. that may occur due to usage of this tool**
 
+> [!IMPORTANT]
+> This tool was originaly created by SmokelessCPUv2, however, for unknown reasons they deleted their GitHub account. Their last commit was [100502283b8ebfb06232b804de33881d9c53670f](https://github.com/hboyd2003/SmokelessRuntimeEFIPatcher/commit/100502283b8ebfb06232b804de33881d9c53670f) on Dec 16, 2022.
 
+### BIOS mod/unlock requests
+This is not a request form.
+**DO NOT** open any issues requesting a BIOS unlock/mod
 
-# These Are tool From "The Vault", that I decided to upload, so expect not fully polished product, or very slow Fixes if any
+### Bugs, features and updates
+As the original creator/maintainer is gone, do not request new features. Feel free to open a pull request if you would like to submit a new feature. If you find any bugs feel free to open an issue or submit a pull request, if I have time I may fix it.
 
-# This is not a request form
-Plese don't open issue not strictly related with the tool.
-Request for bios unlock are not related to the tool,
-for that you can try to ask on the discord server( a bit of effort from you side is required)
+### What?
+This is a simple tool to patch and inject EFI modules at runtime, SmokelessCPUv2 developed this as they weren't confortable with SPI flashing, and requires opening the laptop for every small change, and with secure boot you can no longer flash unsigned BIOSes.
 
-Even if the tool is free, my time is not, so don't expect that I make a patch from scratch for your bios, without you putting some effort in it.
+### Why?
+The tool was developed as a way to unlock a BIOS without the risks/issues/annoyances associated with SPI flashing. Additionally with the usage of secure boot it is no longer possible (in most cases) to get the BIOS to flash itself with a unsigned BIOS.
 
-# Discaimer
-**Use this at your own risk,I won’t be responsible for any damage.**
+### How?
+When the EFI App is booted up, it looks for a file Called *SREP_Config.cfg* in the root of the drive it booted from, containing a list of command to execute.
 
-Also the code quality and the parsing engine are not that great, but were the best I could come to.
+### Usage
+A file with the name ```SREP_Config.cfg``` must be located at the root of the drive the EFI boots from. You can either create your own config or use one of the many created by the community.
 
+Some configs can be found here: [Maxinator500's SREP-Patches](https://github.com/Maxinator500/SREP-Patches)
 
-## Already baked config
-https://github.com/SmokelessCPUv2/SREP-Community-Patches
+To launch you can either get the UEFI BIOS to run it directly or launch it using any other normal means (Grub, UEFI Console, etc.)
 
-# What is this
-This is a simple tool to patch and Inject/Patch EFI modules at runtime, I developed this as I wasn't confortable with SPI flashing, as is not boring and require opening the laptop for every small change, as with AMD you can't flash from the OS a new BIOS, if is not signed...
-
-# Why this exist
-The real reason why this exist, is that with an update Lenovo removed the Unlock BackDoor [LenovoH2O-Unlocker](https://github.com/SmokelessCPUv2/LenovoH2O-Unlocker), so after an update I couldn't change some adv option check [Unlocking Lenovo H2O Bios](#Lenovo-BIOS-Unlock) I decided to develop a new way to do it....
-
-
-# How this work
-When the EFI App is booted up, it look for a file Called *SREP_Config.cfg*, containing a list of command to execute, then will execute them
-
-
-# How to use it
-* Download the Latest zip, from the [Release Page](https://github.com/SmokelessCPUv2/SmokelessRuntimeEFIPatcher/releases/latest)
-
-* extract in a USB, such that exist a Folder Called EFI in the USB Root,
-* Create a SREP_Config.cfg and place in the root of the USB
-* boot from the USB
-* ??
-* Profit
-
-# SREP_Config Structure
-The Config file can containg muliple batch of operation, the syntax is, 
+## SREP_Config
+### Structure
 
     Op OpName1
         Argument 1
@@ -55,7 +42,7 @@ The Config file can containg muliple batch of operation, the syntax is,
         Argument 2
         Argument n
     End
-
+    
     Op OpName3
         Argument 1
         Argument 2
@@ -63,39 +50,22 @@ The Config file can containg muliple batch of operation, the syntax is,
     End
 
 
-# Implemented Operiation
+### Commands
+|   Command  |                                                  Description                                                  |                                                        Arguments                                                       |
+|:----------:|:-------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------:|
+| LoadFromFS | <div align="left">Loads a EFI file into memory from a EFI partition and sets it as the current target</div>   | <div align="left"> <ol> <li>File name: The Filename to load</li> </ol> </div>                                          |
+| LoadFromFV | <div align="left">Loads a EFI file into memory from the FV/Bios image and sets it as the current target</div> | <div align="left"> <ol> <li>Section name: The section to load</li> </ol> </div>                                        |
+|   Loaded   | <div align="left">Set an already loaded module as the current target</div>                                    | <div align="left"> <ol> <li>Name: The name of the loaded module</li> </ol> </div>                                      |
+|    Patch   | <div align="left">Patches the current target</div>                                                            | <div align="left"> <ol> <li>Type: Patch type to perform</li> <li>2..n: Patch type specific arguments</li> </ol> </div> |
+|    Exec    | <div align="left">Executes the current target</div>                                                           |                                                                                                                        |
 
-## LoadFromFS
-Load a EFI File in memory from a EFI partition, set as target
-### Arguments
-    * FileName : The Filename to load
+#### Patch types
+|     Type     |                           Description                          |                                                             Arguments                                                             |
+|:------------:|:--------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------:|
+|    Pattern   | <div align="left">Searches for a pattern and replaces it</div> | <div align="left"> <ol> <li>Hex search: Hex bytes to search for</li> <li>Hex replace: Hex bytes to replace with</li> </ol> </div> |
+| RelPosOffset | <div align="left">Replaces based on byte offset</div>          | <div align="left"> <ol> <li>Offset: Offset in bytes</li> <li>Hex replace: Hex bytes to replace with</li> </ol> </div>             |
 
-
-## LoadFromFV
-Load a EFI File in memory from the FV(Firmware Volume)/The BIOS image, set as target
-### Arguments
-    * SectionName : The Section to load
-
-## Loaded
-Target an already loaded Module
-### Arguments
-    * Name : The Name of the Loaded App to target
-
-## Patch
-Patch the previus loaded target 
-### Arguments
-    * Pattern : provide the Find and Replace a Patterns
-    * Offset : Provide and offset from the File start, and then the Byte to replace here
-    * RelNegOffset/RelPosOffset : negative/positive offset from previus Patch operation, and then the Byte to replace here
-## Exec
-Execute the Previus loaded Module
-
-# To be Implemted
-
-    [ ] Uninstall Protocol
-    [ ] Lzma compressed object (very common on AMI BIOS)
-
-# Example
+## Examples
 This is an Example of Loading a simple EFI, and executing it:
 
     Op LoadFromFS APP.efi
@@ -138,10 +108,12 @@ Find the pattern AABBCCDDEEFF (replace with AABBCCDDEEFF, as we want it's own st
     End
 
 
-## Lenovo-BIOS-Unlock
+### Lenovo-BIOS-Unlock Example
 Now a real example on how to use it to patch a Lenovo Legion Bios to Unlock the Advanced menu:
 
-The Target H2O, is very simple in the regard on which form is shown...
+The Target Insyde H2O, is very simple in the regard on which form is shown...
+> [!NOTE]
+> Their is a surprisingly large variance in the structure of Insyde H20 BIOSes. This form structure is unique to Lenovo.
 
 in the H2OFormBrowserDxe there is a simple array of struct:
 
@@ -217,9 +189,8 @@ So the Finall SREP_Config.cfg is:
     SetupUtilityApp
     Op Exec
 
-
-
-*Note You can't show the AOD menu with this, as it is not even loaded on non HX, cpu, you can force to load, Patching also AoDSetupDxe, but that's a topic for another day.*
+> [!NOTE]
+> Note You can't show the AOD menu with this, as it is not even loaded on non HX, cpu, you can force to load, Patching also AoDSetupDxe, but that's a topic for another day.
 
 
 You could do the same to show the PBS menu and the Advanced Menu on intel one, if you are lazy you can use the combined one AMD/Intel provided here(I might have forgot to unlock something tbh):
@@ -242,32 +213,6 @@ You could do the same to show the PBS menu and the Advanced Menu on intel one, i
     Pattern
     9E76D4C6487F2A4D98E987ADCCF35CCC00000000
     9E76D4C6487F2A4D98E987ADCCF35CCC01000000
-    Op End
-
-    Op LoadFromFV
-    SetupUtilityApp
-    Op Exec
-
-## Lagon Intel 2022 Config
-
-    Op Loaded
-    H2OFormBrowserDxe
-    Op Patch
-    Pattern
-    49D592C3EB27464F8A119F5DF55A9C8B00000000
-    49D592C3EB27464F8A119F5DF55A9C8B01000000
-    Op Patch
-    Pattern
-    1AB0E0C17E60754BB8BB0631ECFAACF200000000
-    1AB0E0C17E60754BB8BB0631ECFAACF201000000
-    Op Patch
-    Pattern
-    9E76D4C6487F2A4D98E987ADCCF35CCC00000000
-    9E76D4C6487F2A4D98E987ADCCF35CCC01000000
-    Op Patch
-    Pattern
-    732871A65F92C64690B4A40F86A0917B00000000
-    732871A65F92C64690B4A40F86A0917B01000000
     Op End
 
     Op LoadFromFV
