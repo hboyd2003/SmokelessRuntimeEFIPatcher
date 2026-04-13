@@ -6,6 +6,8 @@
 
 > [!IMPORTANT]
 > This tool was originaly created by SmokelessCPUv2, however, for unknown reasons they deleted their GitHub account. Their last commit was [100502283b8ebfb06232b804de33881d9c53670f](https://github.com/hboyd2003/SmokelessRuntimeEFIPatcher/commit/100502283b8ebfb06232b804de33881d9c53670f) on Dec 16, 2022.
+>
+> A somewhat updated fork can be found here [Maxinator500/SmokelessRuntimeEFIPatcher-RUS](https://github.com/Maxinator500/SmokelessRuntimeEFIPatcher-RUS)
 
 ### BIOS mod/unlock requests
 This is not a request form.
